@@ -13,60 +13,59 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-# 🧨 Diffusers Examples
+# 🧨 Diffusers 示例
 
-Diffusers examples are a collection of scripts to demonstrate how to effectively use the `diffusers` library
-for a variety of use cases involving training or fine-tuning.
+Diffusers 示例是演示如何使用 `diffusers` 库进行各种训练或微调的脚本集合。
 
-**Note**: If you are looking for **official** examples on how to use `diffusers` for inference, 
-please have a look at [src/diffusers/pipelines](https://github.com/huggingface/diffusers/tree/main/src/diffusers/pipelines)
+**注意** :如果你正在寻找 **官方** 示例来展示如何使用 `diffusers` 进行推理,请查看 [src/diffusers/pipelines](https://github.com/huggingface/diffusers/tree/main/src/diffusers/pipelines)。
 
-Our examples aspire to be **self-contained**, **easy-to-tweak**, **beginner-friendly** and for **one-purpose-only**.
-More specifically, this means:
+我们的示例旨在具有 **自包含性** 、 **易于调整** 、**初学者友好性**和 **单一目的** 。
+更具体地说,这意味着:
 
-- **Self-contained**: An example script shall only depend on "pip-install-able" Python packages that can be found in a `requirements.txt` file. Example scripts shall **not** depend on any local files. This means that one can simply download an example script, *e.g.* [train_unconditional.py](https://github.com/huggingface/diffusers/blob/main/examples/unconditional_image_generation/train_unconditional.py), install the required dependencies, *e.g.* [requirements.txt](https://github.com/huggingface/diffusers/blob/main/examples/unconditional_image_generation/requirements.txt) and execute the example script.
-- **Easy-to-tweak**: While we strive to present as many use cases as possible, the example scripts are just that - examples. It is expected that they won't work out-of-the box on your specific problem and that you will be required to change a few lines of code to adapt them to your needs. To help you with that, most of the examples fully expose the preprocessing of the data and the training loop to allow you to tweak and edit them as required.
-- **Beginner-friendly**: We do not aim for providing state-of-the-art training scripts for the newest models, but rather examples that can be used as a way to better understand diffusion models and how to use them with the `diffusers` library. We often purposefully leave out certain state-of-the-art methods if we consider them too complex for beginners.
-- **One-purpose-only**: Examples should show one task and one task only. Even if a task is from a modeling 
-point of view very similar, *e.g.* image super-resolution and image modification tend to use the same model and training method, we want examples to showcase only one task to keep them as readable and easy-to-understand as possible.
+* **自包含** :示例脚本应该只依赖于可以在 `requirements.txt` 文件中找到的“可通过 pip 安装”的 Python 包。示例脚本**不应该**依赖任何本地文件。这意味着你可以简单地下载一个示例脚本,例如 [train_unconditional.py](https://github.com/huggingface/diffusers/blob/main/examples/unconditional_image_generation/train_unconditional.py),安装所需的依赖项,例如 [requirements.txt](https://github.com/huggingface/diffusers/blob/main/examples/unconditional_image_generation/requirements.txt),然后执行示例脚本。
+* **易于调整** :虽然我们努力展示尽可能多的用例,但示例脚本只是例子。预计它们在你的特定问题上不会开箱即用,你需要更改几行代码将它们调整到你的需要。为了帮助你,大多数示例完全公开了数据的预处理和训练循环,以便根据需要进行调整和编辑。
+* **初学者友好** :我们的目标不是提供最新模型的最先进的训练脚本,而是可以用来更好地理解扩散模型及如何将它们与 `diffusers` 库一起使用的示例。如果我们认为某些最先进的方法对初学者来说太复杂,我们通常会有意地省略它们。
+* **单一目的** :示例应该展示一个任务,只展示一个任务。即使从建模的角度来看,某些任务非常相似,例如图像超分辨率和图像修改往往使用相同的模型和训练方法,但我们希望示例仅展示一个任务,以使它们保持最大的可读性和易理解性。
 
-We provide **official** examples that cover the most popular tasks of diffusion models.
-*Official* examples are **actively** maintained by the `diffusers` maintainers and we try to rigorously follow our example philosophy as defined above. 
-If you feel like another important example should exist, we are more than happy to welcome a [Feature Request](https://github.com/huggingface/diffusers/issues/new?assignees=&labels=&template=feature_request.md&title=) or directly a [Pull Request](https://github.com/huggingface/diffusers/compare) from you!
+我们提供涵盖扩散模型最流行任务的**官方**示例。
+**官方**示例由 `diffusers` 的维护人员**积极地**维护,我们努力严格遵循上面定义的示例理念。
+如果您认为应该存在另一个重要的示例,我们非常欢迎您提出 [Feature Request](https://github.com/huggingface/diffusers/issues/new?assignees=&labels=&template=feature_request.md&title=) 或直接提出 [Pull Request](https://github.com/huggingface/diffusers/compare)。
 
-Training examples show how to pretrain or fine-tune diffusion models for a variety of tasks. Currently we support:
+培训示例展示了如何对各种任务预训练或微调扩散模型。目前我们支持:
 
-| Task | 🤗 Accelerate | 🤗 Datasets | Colab
-|---|---|:---:|:---:|
-| [**Unconditional Image Generation**](./unconditional_image_generation) | ✅ | ✅ | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/training_example.ipynb)
-| [**Text-to-Image fine-tuning**](./text_to_image) | ✅ | ✅ | 
-| [**Textual Inversion**](./textual_inversion) | ✅ | - | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/sd_textual_inversion_training.ipynb)
-| [**Dreambooth**](./dreambooth) | ✅ | - | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/sd_dreambooth_training.ipynb)
-| [**ControlNet**](./controlnet) | ✅ | ✅ | -
-| [**InstructPix2Pix**](./instruct_pix2pix) | ✅ | ✅ | -
-| [**Reinforcement Learning for Control**](https://github.com/huggingface/diffusers/blob/main/examples/reinforcement_learning/run_diffusers_locomotion.py)                    | - | - | coming soon.
+| 任务                                                                                                                                        | 🤗 Accelerate | 🤗 Datasets | Colab                                                                                                                                                                                      |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [**无条件图像生成**](https://claude.ai/chat/unconditional_image_generation)                                                              | ✅            | ✅          | [](https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/training_example.ipynb)[Show Image](https://colab.research.google.com/assets/colab-badge.svg)              |
+| [**文本到图像微调**](https://claude.ai/chat/text_to_image)                                                                               | ✅            | ✅          |                                                                                                                                                                                            |
+| [**文本反转**](https://claude.ai/chat/textual_inversion)                                                                                 | ✅            | -           | [](https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/sd_textual_inversion_training.ipynb)[Show Image](https://colab.research.google.com/assets/colab-badge.svg) |
+| [**Dreambooth**](https://claude.ai/chat/dreambooth)                                                                                      | ✅            | -           | [](https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/sd_dreambooth_training.ipynb)[Show Image](https://colab.research.google.com/assets/colab-badge.svg)        |
+| [**ControlNet**](https://claude.ai/chat/controlnet)                                                                                      | ✅            | ✅          | -                                                                                                                                                                                          |
+| [**InstructPix2Pix**](https://claude.ai/chat/instruct_pix2pix)                                                                           | ✅            | ✅          | -                                                                                                                                                                                          |
+| [**基于强化学习的控制**](https://github.com/huggingface/diffusers/blob/main/examples/reinforcement_learning/run_diffusers_locomotion.py) | -             | -           | 即将推出                                                                                                                                                                                   |
 
-## Community
+## 社区
 
-In addition, we provide **community** examples, which are examples added and maintained by our community.
-Community examples can consist of both *training* examples or *inference* pipelines.
-For such examples, we are more lenient regarding the philosophy defined above and also cannot guarantee to provide maintenance for every issue.
-Examples that are useful for the community, but are either not yet deemed popular or not yet following our above philosophy should go into the [community examples](https://github.com/huggingface/diffusers/tree/main/examples/community) folder. The community folder therefore includes training examples and inference pipelines.
-**Note**: Community examples can be a [great first contribution](https://github.com/huggingface/diffusers/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) to show to the community how you like to use `diffusers` 🪄.
+此外,我们还提供由社区添加和维护的**社区**示例。
+社区示例可以包括*训练*示例或*推理*管道。
+对于这样的示例,我们对上述理念更宽松,也无法保证为每个问题提供维护。
+对社区有用但可能还不被认为流行或尚未遵循我们的理念的示例应放入 [community examples](https://github.com/huggingface/diffusers/tree/main/examples/community) 文件夹。community 文件夹因此包括训练示例和推理管道。
+**注意** :社区示例可以是一个很好的[首次贡献](https://github.com/huggingface/diffusers/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22),向社区展示你喜欢如何使用 `diffusers` 🪄。
 
-## Research Projects
+## 研究项目
 
-We also provide **research_projects** examples that are maintained by the community as defined in the respective research project folders. These examples are useful and offer the extended capabilities which are complementary to the official examples. You may refer to [research_projects](https://github.com/huggingface/diffusers/tree/main/examples/research_projects) for details.
+我们还提供由社区维护的**研究项目**示例,如各自研究项目文件夹中所定义。这些示例很有用,并提供了补充官方示例的扩展功能。您可以参阅 [research_projects](https://github.com/huggingface/diffusers/tree/main/examples/research_projects) 以了解详细信息。
 
-## Important note
+## 重要提示
 
-To make sure you can successfully run the latest versions of the example scripts, you have to **install the library from source** and install some example-specific requirements. To do this, execute the following steps in a new virtual environment:
+为了确保你可以成功运行示例脚本的最新版本,你必须**从源代码安装该库**并安装一些特定于示例的要求。要执行此操作,请在一个新的虚拟环境中执行以下步骤:
+
 ```bash
 git clone https://github.com/huggingface/diffusers
 cd diffusers
 pip install .
 ```
-Then cd in the example folder of your choice and run
+然后进入你选择的示例文件夹并运行:
+
 ```bash
 pip install -r requirements.txt
 ```
