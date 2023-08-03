@@ -33,15 +33,15 @@ Diffusers 示例是演示如何使用 `diffusers` 库进行各种训练或微调
 
 培训示例展示了如何对各种任务预训练或微调扩散模型。目前我们支持:
 
-| 任务                                                                                                                                        | 🤗 Accelerate | 🤗 Datasets | Colab                                                                                                                                                                                      |
-| --------------------------------------------------------------------------------------------------------------------------------------------- | --------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [**无条件图像生成**](https://claude.ai/chat/unconditional_image_generation)                                                              | ✅            | ✅          | [](https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/training_example.ipynb)[Show Image](https://colab.research.google.com/assets/colab-badge.svg)              |
-| [**文本到图像微调**](https://claude.ai/chat/text_to_image)                                                                               | ✅            | ✅          |                                                                                                                                                                                            |
-| [**文本反转**](https://claude.ai/chat/textual_inversion)                                                                                 | ✅            | -           | [](https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/sd_textual_inversion_training.ipynb)[Show Image](https://colab.research.google.com/assets/colab-badge.svg) |
-| [**Dreambooth**](https://claude.ai/chat/dreambooth)                                                                                      | ✅            | -           | [](https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/sd_dreambooth_training.ipynb)[Show Image](https://colab.research.google.com/assets/colab-badge.svg)        |
-| [**ControlNet**](https://claude.ai/chat/controlnet)                                                                                      | ✅            | ✅          | -                                                                                                                                                                                          |
-| [**InstructPix2Pix**](https://claude.ai/chat/instruct_pix2pix)                                                                           | ✅            | ✅          | -                                                                                                                                                                                          |
-| [**基于强化学习的控制**](https://github.com/huggingface/diffusers/blob/main/examples/reinforcement_learning/run_diffusers_locomotion.py) | -             | -           | 即将推出                                                                                                                                                                                   |
+| Task | 🤗 Accelerate | 🤗 Datasets | Colab
+|---|---|:---:|:---:|
+| [**无条件图像生成**](./unconditional_image_generation) | ✅ | ✅ | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/training_example.ipynb)
+| [**文本到图像微调**](./text_to_image) | ✅ | ✅ | 
+| [*文本反转**](./textual_inversion) | ✅ | - | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/sd_textual_inversion_training.ipynb)
+| [**Dreambooth**](./dreambooth) | ✅ | - | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/huggingface/notebooks/blob/main/diffusers/sd_dreambooth_training.ipynb)
+| [**ControlNet**](./controlnet) | ✅ | ✅ | -
+| [**InstructPix2Pix**](./instruct_pix2pix) | ✅ | ✅ | -
+| [**基于强化学习的控制**](https://github.com/huggingface/diffusers/blob/main/examples/reinforcement_learning/run_diffusers_locomotion.py)                    | - | - | 即将推出                                                                                                                                                                                 |
 
 ## 社区
 
