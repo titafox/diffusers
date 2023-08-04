@@ -248,7 +248,47 @@ accelerate launch --mixed_precision="fp16" train_dreambooth.py \
 ```
 关键是使用 DeepSpeed 和 fp16 混合精度来显著减少 VRAM 使用。
 
-### class_data_dir
+
+
+### Class概念解释
+
+在对图片与其描述（对图片内容的描述）进行训练时，模型会将每个输入的图片 与 图片对应的描述（描述里的每个单词）进行关联。而如果我们是要训练一个特定的对象（例如人），则这种方式是达不到我们预期效果的。
+
+举个例子，假设我们要训练一个“施瓦辛格”的模型。我们有他3张instance图片，并分别使用下面的描述：
+
+1. Arnold Schwarzenegger, man, sunglasses, black coat, muscular, scene from Terminator
+2. Arnold Schwarzenegger, man, suit, red tie, smiling
+3. Arnold Schwarzenegger, muscular, smiling, man, flexing, black and white
+
+如果我们训练这些图片时，不使用类别图片（Class Images）。模型最终可能可以生成很好的施瓦辛格图片。但是，描述里的其他单词也会被影响。例如，如果在结果模型中使用提示词man，则会输出像施瓦辛格的男人。一个单词在描述里出现的频率越高，则受影响的程度越大。不常见的单词同样在训练中也越容易受到影响，所以单词“man”相对于单词“Governator”则需要更多的训练进行影响。
+
+这里就是类别图片作用的地方。假设我们使用同样的描述，但是使用以下配置：
+
+* Instance Token = Arnold Schwarzenegger
+* Class Token = man
+* Instance Prompt = [filewords]
+* Class Prompt = [filewords]
+* # Class Images = 1
+
+对图片的描述会处理为下面的类别描述：
+
+1. man, sunglasses, black coat, muscular, scene from Terminator
+2. man, suit, red tie, smiling
+3. muscular, smiling, man, flexing, black and white
+
+这个插件会为每张Instance图片生成1个类别图片（Class Image）。这些类别图片以及描述，会组成一对，然后与Instance图片一起送入dreambooth。现在单词“man”就会在施瓦辛格以及其他的（假设为随机）3张 man 的类别图片上进行训练。这样就可以保留原始模型对单词“man”的概念。
+
+如果我们有一个小的数据集，或者是要做一个大规模的训练。则为每个图片生成1张类别图可能是不够的。在施瓦辛格的例子中，“man”可能会生成看起来像施瓦辛格或是类别图片中的男人。如果所有的类别图片中，男人都是秃头，则“man”可能就会偏向为生成秃头的男人。通过调整Class Images的倍数#，我们可以引入更多的随机生成的“man”图片，也就会引入更多模型对与“man”的概念，从而减少训练模型时的bias。
+
+最后提一下关于实现类图片的重要事项。每个Instance 图片以及1张关联的类别图片，会在每个epoch中一起送入dreambooth。（这里在使用多个images buckets时，会增加一些复杂度，但是我们可以忽略）。
+
+增加类别图片数量不会增加输入到dreambooth中instance图片的类别比率。类别图片的权重由Prior Weight Loss决定：
+
+* Prior Weight Loss = 1.0：可能太高，生成的对象会非常像类别图像
+* Prior Weight Loss = 0.01：太低，类别图像会被忽略
+* Prior Weight Loss = 0.15 – 0.4之间：一般是合理的区域
+
+#### class_data_dir
 训练开始以后，先验知识图片存放图片的目录为class_data_dir
 
 * `with_prior_preservation`: 是否将生成的同类图片（先验知识）一同加入训练，当为`True`的时候，`class_prompt`、`class_data_dir`、`num_class_images`、`sample_batch_size`和`prior_loss_weight`才生效。
