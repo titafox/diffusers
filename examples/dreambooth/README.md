@@ -252,10 +252,11 @@ instance_data_dir目录下应该包含用于DreamBooth训练的instance图像。
 
 该目录的组织结构通常很简单,类似如下:
 
-instance_data_dir
-img1.png
-img2.png
-img3.png ...
+* INSTANCE_DIR
+  * img1.png
+  * img2.png
+  * img3.png
+  * ...
 也就是说instance_data_dir直接放置instance对象(例如特定狗)的各种图片。
 
 图像的数量和质量会直接影响训练效果。一般来说,数量越多效果越好,但即使只有几张图像也能工作。图像质量越高越好。
@@ -271,13 +272,14 @@ class_data_dir目录下应该包含一系列用于训练的类图像,用于提�
 
 该目录的组织结构通常如下:
 
-class_data_dir
-class1
-img1.png
-img2.png ...
-class2
-img1.png ...
-...
+* class_data_dir
+  * class1
+    * img1.png
+    * img2.png ...
+  * class2
+    * img1.png ...
+  * ...
+
 也就是说,class_data_dir下包含多个类别的子目录,每个子目录下是对应类别的图像。
 
 图像的数量和质量会影响最终的模型效果。一般来说,每个类别至少需要100张以上的高质量图像,才能提供足够的先验知识。
