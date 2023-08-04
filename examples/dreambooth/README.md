@@ -248,65 +248,15 @@ accelerate launch --mixed_precision="fp16" train_dreambooth.py \
 ```
 关键是使用 DeepSpeed 和 fp16 混合精度来显著减少 VRAM 使用。
 
-### class_data_dir和instance_data_dir
+### class_data_dir
+训练开始以后，先验知识图片存放图片的目录为class_data_dir
 
-instance_data_dir和class_data_dir之间的主要区别是:
-
-* instance_data_dir: 包含要训练的特定实例对象的图像,例如某个具体的人或者狗。这些图像会让模型学会生成该特定实例。
-* class_data_dir: 包含同一类对象的通用图像,例如各种不同狗的图片。这些图像提供类的先验知识,避免模型过度拟合特定实例。
-
-instance_data_dir是必需的,包含要训练的实例对象。这主要决定了模型能生成什么样的内容。
-
-class_data_dir是可选的,包含更多同类别样本。这有助于模型学习整个类的特征分布,避免只记住特定实例的信息。
-
-所以instance_data_dir是核心数据,class_data_dir是可选的辅助数据。former决定了特定生成内容,latter帮助模型学习类的先验知识。二者共同提高生成质量和多样性。
-
-简单来说,instance_data_dir是“这个”,class_data_dir是“这类东西”。两者共同作用让模型既学会特定实例,又不忘记更广泛的先验知识。
-
-#### instance_data_dir
-
-instance_data_dir目录下应该包含用于DreamBooth训练的instance图像。
-
-该目录的组织结构通常很简单,类似如下:
-
-* INSTANCE_DIR
-  * img1.png
-  * img2.png
-  * img3.png
-  * ...
-也就是说instance_data_dir直接放置instance对象(例如特定狗)的各种图片。
-
-图像的数量和质量会直接影响训练效果。一般来说,数量越多效果越好,但即使只有几张图像也能工作。图像质量越高越好。
-
-如果图像中包含复杂的背景,可以考虑先进行抠图来聚焦对象。
-
-另外,如果目标是生成人像,由于需要避免生成不存在的人,实例图像不宜过少(一般需要10张以上)。
-
-所以实例图像目录很简单,直接准备好instance对象的图片就可以,数量质量越高效果越好。这是DreamBooth训练最关键的数据。
-
-#### class_data_dir
-class_data_dir目录下应该包含一系列用于训练的类图像,用于提供类先验信息。
-
-该目录的组织结构通常如下:
-
-* class_data_dir
-  * class1
-    * img1.png
-    * img2.png ...
-  * class2
-    * img1.png ...
-  * ...
-
-也就是说,class_data_dir下包含多个类别的子目录,每个子目录下是对应类别的图像。
-
-图像的数量和质量会影响最终的模型效果。一般来说,每个类别至少需要100张以上的高质量图像,才能提供足够的先验知识。
-
-如果class_data_dir中的图像不足,训练脚本在运行时会自动采样生成更多类图像以达到所需的数量。
-
-另外,class_data_dir可以为空或者不提供,这时就不会使用类先验的损失,效果可能会略差一些。
-
-所以在有限的数据条件下,提供class_data_dir可以帮助提升模型对类特征的学习。但即使没有也可以进行DreamBooth微调训练。
-
+* `with_prior_preservation`: 是否将生成的同类图片（先验知识）一同加入训练，当为`True`的时候，`class_prompt`、`class_data_dir`、`num_class_images`、`sample_batch_size`和`prior_loss_weight`才生效。
+* `class_prompt`:类别（class）提示词文本，该提示器要与训练图片是同一种类别，例如`a photo of dog`，主要作为先验知识
+* `class_data_dir`:类别（class）图片文件夹地址，主要作为先验知识
+* `num_class_images`:事先需要从`class_prompt`中生成多少张图片，主要作为先验知识
+* `sample_batch_size`:生成class_prompt文本对应的图片所用的批次（batch size），注意，当GPU显卡显存较小的时候需要将这个默认值改成1
+* `prior_loss_weight`: 先验`loss`占比权重
 
 ### 使用UNet微调文本编码器。
 
