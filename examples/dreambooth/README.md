@@ -86,6 +86,23 @@ accelerate launch train_dreambooth.py \
   --push_to_hub
 ```
 
+#### --push_to_hub
+
+--push_to_hub 是将训练好的DreamBooth模型推送到Hugging Face Hub来分享的选项。使用方法如下:
+
+1. 在Hugging Face上注册账号,然后在网站的Settings中获取个人Access Token。
+2. 在训练命令最后加上--push_to_hub参数,同时用--hub_token指定Access Token:
+
+```bash
+--hub_token="xxxxxxx"
+````
+3.  可选地用--hub_model_id指定模型在Hub上的名字,不指定会使用output_dir的名字:
+```bash
+--hub_model_id="titafox/test"
+```
+4. 训练结束后,脚本会自动创建Hub仓库,上传模型文件和生成示例图片。
+5. 在Hub上刷新你的模型列表,就可以看到新上传的DreamBooth模型,可以直接使用。
+
 ### 使用先验保留损失进行训练
 
 先验保留用于避免过拟合和语言漂移。参阅论文以了解更多信息。 对于先验保留,我们首先使用模型和一个类别提示生成图像,然后在训练时将这些图像与我们的数据一起使用。
