@@ -268,7 +268,7 @@ accelerate launch --mixed_precision="fp16" train_dreambooth.py \
 * Class Token = man
 * Instance Prompt = [filewords]
 * Class Prompt = [filewords]
-* # Class Images = 1
+* Class Images = 1
 
 对图片的描述会处理为下面的类别描述：
 
