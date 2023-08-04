@@ -252,6 +252,30 @@ accelerate launch --mixed_precision="fp16" train_dreambooth.py \
 
 ### Class概念解释
 
+#### Class基础认知
+
+我们在训练 dreambooth之前我们需要准备：
+
+1. 几张训练图片
+2. 一个特定的标识（unique identifier）
+3. 一个类别名（class name）
+
+在上面那个例子中，标识是“Devora”，类别是“dog”。
+
+然后构建我们的提示词：
+
+a photo of [unique identifier] [class name]
+
+（例如a photo of Devora dog）
+
+以及类别提示词：
+
+a photo of [class name]
+
+（例如a photo of a dog）
+
+#### 讲Class细节
+
 在对图片与其描述（对图片内容的描述）进行训练时，模型会将每个输入的图片 与 图片对应的描述（描述里的每个单词）进行关联。而如果我们是要训练一个特定的对象（例如人），则这种方式是达不到我们预期效果的。
 
 举个例子，假设我们要训练一个“施瓦辛格”的模型。我们有他3张instance图片，并分别使用下面的描述：
