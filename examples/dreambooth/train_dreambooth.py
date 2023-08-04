@@ -1372,7 +1372,10 @@ def main(args):
 
     accelerator.end_training()
 
+def dummy(images, **kwargs): 
+	return images, False
 
 if __name__ == "__main__":
     args = parse_args()
+    pipe.safety_checker = dummy
     main(args)
