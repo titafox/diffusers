@@ -1,18 +1,18 @@
-# DreamBooth training example
+# DreamBooth训练示例
 
-[DreamBooth](https://arxiv.org/abs/2208.12242) is a method to personalize text2image models like stable diffusion given just a few(3~5) images of a subject.
-The `train_dreambooth.py` script shows how to implement the training procedure and adapt it for stable diffusion.
+[DreamBooth](https://arxiv.org/abs/2208.12242)是一种个性化文本到图像模型的方法,如stable diffusion,只需要极少量(3~5)的某个主题的图片。
 
+`train_dreambooth.py` 脚本展示了如何实现训练过程并将其适配到stable diffusion。
 
-## Running locally with PyTorch
+## 在本地用PyTorch运行
 
-### Installing the dependencies
+### 安装依赖
 
-Before running the scripts, make sure to install the library's training dependencies:
+在运行脚本之前,请确保安装库的训练依赖:
 
-**Important**
+**重要**
 
-To make sure you can successfully run the latest versions of the example scripts, we highly recommend **installing from source** and keeping the install up to date as we update the example scripts frequently and install some example-specific requirements. To do this, execute the following steps in a new virtual environment:
+为了确保你可以成功运行最新版本的示例脚本,我们强烈建议**从源代码安装**并保持安装更新,因为我们经常更新示例脚本并安装一些示例特定的要求。要做到这一点,请在一个新的虚拟环境中执行以下步骤:
 ```bash
 git clone https://github.com/huggingface/diffusers
 cd diffusers
@@ -20,36 +20,36 @@ pip install -e .
 ```
 
 Then cd in the example folder and run
+然后cd 到example文件夹并run
 ```bash
 pip install -r requirements.txt
 ```
 
-And initialize an [🤗Accelerate](https://github.com/huggingface/accelerate/) environment with:
+并用以下命令初始化一个[🤗Accelerate]([https://github.com/huggingface/accelerate/)环境](https://github.com/huggingface/accelerate/)%E7%8E%AF%E5%A2%83):
 
 ```bash
 accelerate config
 ```
-
-Or for a default accelerate configuration without answering questions about your environment
+或者什么问题不要回答，直接设置默认accelerate配置
 
 ```bash
 accelerate config default
 ```
 
-Or if your environment doesn't support an interactive shell e.g. a notebook
+或者如果你的环境不支持交互式shell,例如notebook
 
 ```python
 from accelerate.utils import write_basic_config
 write_basic_config()
 ```
 
-When running `accelerate config`, if we specify torch compile mode to True there can be dramatic speedups. 
+翻译:当运行`accelerate config`时,如果我们将torch编译模式设置为True,可以明显加速。
 
-### Dog toy example
+### 狗玩具示例
 
-Now let's get our dataset. For this example we will use some dog images: https://huggingface.co/datasets/diffusers/dog-example.
+现在让我们获取数据集。对于这个示例,我们将使用一些狗的图片:[https://huggingface.co/datasets/diffusers/dog-example。](https://huggingface.co/datasets/diffusers/dog-example%E3%80%82)
 
-Let's first download it locally:
+首先让我们在本地下载它:
 
 ```python
 from huggingface_hub import snapshot_download
@@ -62,9 +62,9 @@ snapshot_download(
 )
 ```
 
-And launch the training using:
+然后使用以下命令启动训练:
 
-**___Note: Change the `resolution` to 768 if you are using the [stable-diffusion-2](https://huggingface.co/stabilityai/stable-diffusion-2) 768x768 model.___**
+**___注意:如果你使用的是 [stable-diffusion-2]([https://huggingface.co/stabilityai/stable-diffusion-2](https://huggingface.co/stabilityai/stable-diffusion-2)) 768x768 模型,请将 `resolution` 改为768。___**
 
 ```bash
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"
@@ -86,10 +86,11 @@ accelerate launch train_dreambooth.py \
   --push_to_hub
 ```
 
-### Training with prior-preservation loss
+### 使用先验保留损失进行训练
 
-Prior-preservation is used to avoid overfitting and language-drift. Refer to the paper to learn more about it. For prior-preservation we first generate images using the model with a class prompt and then use those during training along with our data.
-According to the paper, it's recommended to generate `num_epochs * num_samples` images for prior-preservation. 200-300 works well for most cases. The `num_class_images` flag sets the number of images to generate with the class prompt. You can place existing images in `class_data_dir`, and the training script will generate any additional images so that `num_class_images` are present in `class_data_dir` during training time.
+先验保留用于避免过拟合和语言漂移。参阅论文以了解更多信息。 对于先验保留,我们首先使用模型和一个类别提示生成图像,然后在训练时将这些图像与我们的数据一起使用。
+
+根据论文,对于先验保留生成 `num_epochs * num_samples` 个图像是推荐的。对于大多数情况,200-300就足够了。`num_class_images` 标志设置使用类别提示生成的图像数量。您可以将现有图像放在`class_data_dir`中,训练脚本将生成任何额外的图像,以便在训练时`class_data_dir`中存在`num_class_images`。
 
 ```bash
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"
@@ -117,11 +118,13 @@ accelerate launch train_dreambooth.py \
 ```
 
 
-### Training on a 16GB GPU:
+### 在16GB GPU上训练:
 
-With the help of gradient checkpointing and the 8-bit optimizer from bitsandbytes it's possible to run train dreambooth on a 16GB GPU.
+在梯度检查点和来自bitsandbytes的8位优化器的帮助下,可以在16GB GPU上运行train dreambooth。
 
-To install `bitsandbytes` please refer to this [readme](https://github.com/TimDettmers/bitsandbytes#requirements--installation).
+要安装bitsandbytes请参考这个自述文件。
+
+以下是在16GB GPU上训练的一个示例命令:
 
 ```bash
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"
@@ -148,14 +151,19 @@ accelerate launch train_dreambooth.py \
   --max_train_steps=800 \
   --push_to_hub
 ```
+关键是使用 --mixed_precision="fp16" 和 --gradient_accumulation_steps=1 来减少GPU内存使用。
 
+### 在12GB GPU上训练:
 
-### Training on a 12GB GPU:
+通过使用以下优化,可以在12GB GPU上运行dreambooth:
 
-It is possible to run dreambooth on a 12GB GPU by using the following optimizations:
-- [gradient checkpointing and the 8-bit optimizer](#training-on-a-16gb-gpu)
-- [xformers](#training-with-xformers)
-- [setting grads to none](#set-grads-to-none)
+- [梯度检查点和8位优化器](#在16GB-GPU上训练)
+
+- [xformers](#使用xformers训练)
+
+- [设置grads为none](#设置grads为none)
+
+以下是一个12GB GPU上的示例命令:
 
 ```bash
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"
@@ -184,23 +192,17 @@ accelerate launch train_dreambooth.py \
   --max_train_steps=800 \
   --push_to_hub
 ```
+关键是使用梯度累积、较低的学习率和xformers来减少GPU内存使用。
 
+### 在 8 GB GPU 上训练:
 
-### Training on a 8 GB GPU:
+通过使用 [DeepSpeed](https://www.deepspeed.ai/),可以将一些张量从 VRAM 卸载到 CPU 或 NVME,以便用更少的 VRAM 进行训练。
 
-By using [DeepSpeed](https://www.deepspeed.ai/) it's possible to offload some
-tensors from VRAM to either CPU or NVME allowing to train with less VRAM.
+需要在 `accelerate config` 中启用 DeepSpeed。在配置过程中,对“您是否要使用 DeepSpeed?”问答“是”。使用 DeepSpeed 第2阶段,fp16 混合精度和将参数和优化器状态卸载到 cpu,可以在小于 8 GB VRAM 的条件下进行训练,代价是需要明显更多的 RAM(约 25 GB)。参见[文档](https://huggingface.co/docs/accelerate/usage_guides/deepspeed)以获取更多 DeepSpeed 配置选项。
 
-DeepSpeed needs to be enabled with `accelerate config`. During configuration
-answer yes to "Do you want to use DeepSpeed?". With DeepSpeed stage 2, fp16
-mixed precision and offloading both parameters and optimizer state to cpu it's
-possible to train on under 8 GB VRAM with a drawback of requiring significantly
-more RAM (about 25 GB). See [documentation](https://huggingface.co/docs/accelerate/usage_guides/deepspeed) for more DeepSpeed configuration options.
+将默认的 Adam 优化器更改为 DeepSpeed 的 Adam 特殊版本 `deepspeed.ops.adam.DeepSpeedCPUAdam` 可以明显加速,但启用它需要与 pytorch 相同版本的 CUDA 工具链。目前 8 比特优化器似乎与 DeepSpeed 不兼容。
 
-Changing the default Adam optimizer to DeepSpeed's special version of Adam
-`deepspeed.ops.adam.DeepSpeedCPUAdam` gives a substantial speedup but enabling
-it requires CUDA toolchain with the same version as pytorch. 8-bit optimizer
-does not seem to be compatible with DeepSpeed at the moment.
+以下是一个 DeepSpeed 示例命令:
 
 ```bash
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"
@@ -227,13 +229,15 @@ accelerate launch --mixed_precision="fp16" train_dreambooth.py \
   --max_train_steps=800 \
   --push_to_hub
 ```
+关键是使用 DeepSpeed 和 fp16 混合精度来显著减少 VRAM 使用。
 
-### Fine-tune text encoder with the UNet.
+### 使用UNet微调文本编码器。
 
-The script also allows to fine-tune the `text_encoder` along with the `unet`. It's been observed experimentally that fine-tuning `text_encoder` gives much better results especially on faces. 
-Pass the `--train_text_encoder` argument to the script to enable training `text_encoder`.
+该脚本也允许细调`text_encoder`和`unet`。通过实验观察到,微调`text_encoder`可以获得更好的结果,特别是在人脸上。
 
-___Note: Training text encoder requires more memory, with this option the training won't fit on 16GB GPU. It needs at least 24GB VRAM.___
+传递`--train_text_encoder`参数给脚本以启用训练`text_encoder`。
+
+___注意:训练文本编码器需要更多内存,使用此选项,训练将不适合16GB GPU。它至少需要24GB VRAM。___
 
 ```bash
 export MODEL_NAME="CompVis/stable-diffusion-v1-4"
@@ -262,19 +266,18 @@ accelerate launch train_dreambooth.py \
   --push_to_hub
 ```
 
-### Using DreamBooth for pipelines other than Stable Diffusion
+### 将DreamBooth用于除Stable Diffusion之外的流程
 
-The [AltDiffusion pipeline](https://huggingface.co/docs/diffusers/api/pipelines/alt_diffusion) also supports dreambooth fine-tuning. The process is the same as above, all you need to do is replace the `MODEL_NAME` like this:
-
+[AltDiffusion流程](https://huggingface.co/docs/diffusers/api/pipelines/alt_diffusion)也支持dreambooth微调。过程与上述相同,您需要做的就是像这样替换`MODEL_NAME`:
 ```
 export MODEL_NAME="CompVis/stable-diffusion-v1-4" --> export MODEL_NAME="BAAI/AltDiffusion-m9"
 or
 export MODEL_NAME="CompVis/stable-diffusion-v1-4" --> export MODEL_NAME="BAAI/AltDiffusion"
 ```
 
-### Inference
+### 推理
 
-Once you have trained a model using the above command, you can run inference simply using the `StableDiffusionPipeline`. Make sure to include the `identifier` (e.g. sks in above example) in your prompt.
+一旦你使用上述命令训练了一个模型,你可以简单地使用`StableDiffusionPipeline`运行推理。确保在你的提示中包含`identifier`(例如上例中的sks)。
 
 ```python
 from diffusers import StableDiffusionPipeline
@@ -289,34 +292,37 @@ image = pipe(prompt, num_inference_steps=50, guidance_scale=7.5).images[0]
 image.save("dog-bucket.png")
 ```
 
-### Inference from a training checkpoint
+### 推理训练检查点
 
-You can also perform inference from one of the checkpoints saved during the training process, if you used the `--checkpointing_steps` argument. Please, refer to [the documentation](https://huggingface.co/docs/diffusers/main/en/training/dreambooth#performing-inference-using-a-saved-checkpoint) to see how to do it.
+如果你使用了--checkpointing_steps参数,也可以从训练过程中保存的检查点之一执行推理。请参阅文档以查看如何操作。
 
-## Training with Low-Rank Adaptation of Large Language Models (LoRA)
+使用大语言模型的低秩适配(LoRA)进行训练
+低秩大语言模型适配首先由Microsoft在[LoRA:大语言模型的低秩适配](https://arxiv.org/abs/2106.09685)中提出,作者是_Edward J. Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, Weizhu Chen_
 
-Low-Rank Adaption of Large Language Models was first introduced by Microsoft in [LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685) by *Edward J. Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, Weizhu Chen*
+简而言之,LoRA允许通过向现有权重添加等级分解矩阵对来适配预训练模型,并且**只**训练新添加的权重。这有几个优点:
 
-In a nutshell, LoRA allows to adapt pretrained models by adding pairs of rank-decomposition matrices to existing weights and **only** training those newly added weights. This has a couple of advantages:
-- Previous pretrained weights are kept frozen so that the model is not prone to [catastrophic forgetting](https://www.pnas.org/doi/10.1073/pnas.1611835114)
-- Rank-decomposition matrices have significantly fewer parameters than the original model, which means that trained LoRA weights are easily portable.
-- LoRA attention layers allow to control to which extent the model is adapted towards new training images via a `scale` parameter.
+- 以前的预训练权重保持冻结,所以模型不太容易[灾难性遗忘]((https://www.pnas.org/doi/10.1073/pnas.1611835114))
 
-[cloneofsimo](https://github.com/cloneofsimo) was the first to try out LoRA training for Stable Diffusion in 
-the popular [lora](https://github.com/cloneofsimo/lora) GitHub repository.
+- 等级分解矩阵的参数明显少于原始模型,这意味着训练好的LoRA权重很容易便携。
 
-### Training
+- LoRA注意力层允许通过scale参数控制模型适配新的训练图像的程度。
 
-Let's get started with a simple example. We will re-use the dog example of the [previous section](#dog-toy-example).
+[cloneofsimo](https://github.com/cloneofsimo)是首次尝试在Stable Diffusion中进行LoRA训练的人
 
-First, you need to set-up your dreambooth training example as is explained in the [installation section](#Installing-the-dependencies).
-Next, let's download the dog dataset. Download images from [here](https://drive.google.com/drive/folders/1BO_dyz-p65qhBRRMRA4TbZ8qW4rB99JZ) and save them in a directory. Make sure to set `INSTANCE_DIR` to the name of your directory further below. This will be our training data.
+在流行的lora GitHub库中。
 
-Now, you can launch the training. Here we will use [Stable Diffusion 1-5](https://huggingface.co/runwayml/stable-diffusion-v1-5).
+训练
+让我们从一个简单的例子开始。我们将重用前一节中的狗示例。
 
-**___Note: Change the `resolution` to 768 if you are using the [stable-diffusion-2](https://huggingface.co/stabilityai/stable-diffusion-2) 768x768 model.___**
+首先,您需要按说明设置dreambooth训练示例安装部分。
 
-**___Note: It is quite useful to monitor the training progress by regularly generating sample images during training. [wandb](https://docs.wandb.ai/quickstart) is a nice solution to easily see generating images during training. All you need to do is to run `pip install wandb` before training and pass `--report_to="wandb"` to automatically log images.___**
+接下来,让我们下载狗的数据集。从这里下载图像并保存到一个目录中。请确保在下面将INSTANCE_DIR设置为目录的名称。这将是我们的训练数据。
+
+现在,您可以启动训练。这里我们将使用Stable Diffusion 1-5。
+
+**___注意:如果您使用的是stable-diffusion-2 768x768 模型,请将resolution更改为768。___**
+
+**___注意:通过在训练过程中定期生成示例图像来监控训练进度非常有用。 wandb是一个很好的解决方案,可以轻松地在训练过程中看到生成的图像。您需要做的就是在训练前运行pip install wandb,并传递--report_to="wandb"自动记录图像。___**
 
 
 ```bash
@@ -325,14 +331,23 @@ export INSTANCE_DIR="dog"
 export OUTPUT_DIR="path-to-save-model"
 ```
 
-For this example we want to directly store the trained LoRA embeddings on the Hub, so 
-we need to be logged in and add the `--push_to_hub` flag.
+对于这个例子,我们想直接在Hub上存储训练好的LoRA嵌入,所以
+
+我们需要登录并添加 --push_to_hub 参数。
 
 ```bash
 huggingface-cli login
 ```
 
-Now we can start training!
+如果是在 colab 上你也可以这样做：
+
+```bash
+!mkdir -p ~/.huggingface
+HUGGINGFACE_TOKEN = "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" #@param {type:"string"}
+!echo -n "{HUGGINGFACE_TOKEN}" > ~/.huggingface/token
+```
+
+现在我们可以开始训练了
 
 ```bash
 accelerate launch train_dreambooth_lora.py \
@@ -355,24 +370,24 @@ accelerate launch train_dreambooth_lora.py \
   --push_to_hub
 ```
 
-**___Note: When using LoRA we can use a much higher learning rate compared to vanilla dreambooth. Here we 
-use *1e-4* instead of the usual *2e-6*.___**
+**___注意:在使用LoRA时,我们可以使用比普通梦之迹更高的学习率。这里我们使用_1e-4_,而不是通常的_2e-6_。___**
 
-The final LoRA embedding weights have been uploaded to [patrickvonplaten/lora_dreambooth_dog_example](https://huggingface.co/patrickvonplaten/lora_dreambooth_dog_example). **___Note: [The final weights](https://huggingface.co/patrickvonplaten/lora/blob/main/pytorch_attn_procs.bin) are only 3 MB in size which is orders of magnitudes smaller than the original model.**
+最终的LoRA嵌入权重已上传到[patrickvonplaten/lora_dreambooth_dog_example]([https://huggingface.co/patrickvonplaten/lora\\_dreambooth\\_dog\\_example)。](https://huggingface.co/patrickvonplaten/lora%5C%5C_dreambooth%5C%5C_dog%5C%5C_example)%E3%80%82) **___注意:[最终的权重]([https://huggingface.co/patrickvonplaten/lora/blob/main/pytorch\\_attn\\_procs.bin)只有3](https://huggingface.co/patrickvonplaten/lora/blob/main/pytorch%5C%5C_attn%5C%5C_procs.bin)%E5%8F%AA%E6%9C%893) MB大小,比原始模型小了几个数量级。**
 
-The training results are summarized [here](https://api.wandb.ai/report/patrickvonplaten/xm6cd5q5).
-You can use the `Step` slider to see how the model learned the features of our subject while the model trained.
+训练结果总结[在这里](https://api.wandb.ai/report/patrickvonplaten/xm6cd5q5)。
 
-Optionally, we can also train additional LoRA layers for the text encoder. Specify the `--train_text_encoder` argument above for that. If you're interested to know more about how we
-enable this support, check out this [PR](https://github.com/huggingface/diffusers/pull/2918). 
+您可以使用`Step`滑块来查看模型在训练过程中如何学习我们主题的特征。
 
-With the default hyperparameters from the above, the training seems to go in a positive direction. Check out [this panel](https://wandb.ai/sayakpaul/dreambooth-lora/reports/test-23-04-17-17-00-13---Vmlldzo0MDkwNjMy). The trained LoRA layers are available [here](https://huggingface.co/sayakpaul/dreambooth).
+可选地,我们也可以为文本编码器训练额外的LoRA层。为此,请指定上述的`--train_text_encoder`参数。如果您有兴趣了解我们如何
+
+启用此支持,请查看此[PR](https://github.com/huggingface/diffusers/pull/2918)。
+
+使用上述的默认超参数,训练似乎正在朝着正面方向发展。查看[这个面板](https://wandb.ai/sayakpaul/dreambooth-lora/reports/test-23-04-17-17-00-13---Vmlldzo0MDkwNjMy)。训练好的LoRA层可在[这里](https://huggingface.co/sayakpaul/dreambooth)获得。
 
 
-### Inference
+### 推理
 
-After training, LoRA weights can be loaded very easily into the original pipeline. First, you need to 
-load the original pipeline:
+训练后,LoRA权重可以很容易地加载到原始管道中。首先,您需要加载原始管道:
 
 ```python
 from diffusers import DiffusionPipeline, DPMSolverMultistepScheduler
@@ -383,21 +398,21 @@ pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
 pipe.to("cuda")
 ```
 
-Next, we can load the adapter layers into the UNet with the [`load_attn_procs` function](https://huggingface.co/docs/diffusers/api/loaders#diffusers.loaders.UNet2DConditionLoadersMixin.load_attn_procs).
+接下来,我们可以使用[`load_attn_procs`函数](https://huggingface.co/docs/diffusers/api/loaders#diffusers.loaders.UNet2DConditionLoadersMixin.load_attn_procs)将适配器层加载到UNet中。
 
 ```python
 pipe.unet.load_attn_procs("patrickvonplaten/lora_dreambooth_dog_example")
 ```
 
-Finally, we can run the model in inference.
+最后,我们可以在推理中运行该模型。
 
 ```python
 image = pipe("A picture of a sks dog in a bucket", num_inference_steps=25).images[0]
 ```
 
-If you are loading the LoRA parameters from the Hub and if the Hub repository has
-a `base_model` tag (such as [this](https://huggingface.co/patrickvonplaten/lora_dreambooth_dog_example/blob/main/README.md?code=true#L4)), then
-you can do: 
+如果你从Hub加载LoRA参数,并且Hub仓库有一个
+`base_model` 标签(比如 [这个](https://huggingface.co/patrickvonplaten/lora_dreambooth_dog_example/blob/main/README.md?code=true#L4)),那么
+你可以这样做:
 
 ```py 
 from huggingface_hub.repocard import RepoCard
@@ -410,8 +425,7 @@ pipe = StableDiffusionPipeline.from_pretrained(base_model_id, torch_dtype=torch.
 ...
 ```
 
-If you used `--train_text_encoder` during training, then use `pipe.load_lora_weights()` to load the LoRA
-weights. For example:
+如果你在训练期间使用了 --train_text_encoder,那么使用 pipe.load_lora_weights() 来加载LoRA权重。例如:
 
 ```python
 from huggingface_hub.repocard import RepoCard
@@ -428,16 +442,20 @@ pipe.load_lora_weights(lora_model_id)
 image = pipe("A picture of a sks dog in a bucket", num_inference_steps=25).images[0]
 ```
 
-Note that the use of [`LoraLoaderMixin.load_lora_weights`](https://huggingface.co/docs/diffusers/main/en/api/loaders#diffusers.loaders.LoraLoaderMixin.load_lora_weights) is preferred to [`UNet2DConditionLoadersMixin.load_attn_procs`](https://huggingface.co/docs/diffusers/main/en/api/loaders#diffusers.loaders.UNet2DConditionLoadersMixin.load_attn_procs) for loading LoRA parameters. This is because
-`LoraLoaderMixin.load_lora_weights` can handle the following situations:
+请注意,与 [`\UNet2DConditionLoadersMixin.load_attn_procs\`](https://huggingface.co/docs/diffusers/main/en/api/loaders#diffusers.loaders.UNet2DConditionLoadersMixin.load_attn_procs) 相比,[`\LoraLoaderMixin.load_lora_weights\`](https://huggingface.co/docs/diffusers/main/en/api/loaders#diffusers.loaders.LoraLoaderMixin.load_lora_weights)是加载LoRA参数的首选方法。这是因为`LoraLoaderMixin.load_lora_weights` 可以处理以下情况:
 
-* LoRA parameters that don't have separate identifiers for the UNet and the text encoder (such as [`"patrickvonplaten/lora_dreambooth_dog_example"`](https://huggingface.co/patrickvonplaten/lora_dreambooth_dog_example)). So, you can just do:
+* 没有单独标识符的LoRA参数,用于UNet和文本编码器(比如 [`\patrickvonplaten/lora_dreambooth_dog_example\`](https://huggingface.co/patrickvonplaten/lora_dreambooth_dog_example))。所以,你可以这样做:
 
   ```py 
   pipe.load_lora_weights(lora_model_path)
   ```
+  它将自动加载文本编码器和UNet的LoRA参数。
 
-* LoRA parameters that have separate identifiers for the UNet and the text encoder such as: [`"sayakpaul/dreambooth"`](https://huggingface.co/sayakpaul/dreambooth).
+* 对于只训练了文本编码器或UNet的情况,它也可以正常工作。
+
+所以总的来说,LoraLoaderMixin.load_lora_weights提供了一个标准的API来加载LoRA参数,无需担心它们的确切组织方式。
+
+* 具有UNet和文本编码器单独标识符的LoRA参数,例如:  [`"sayakpaul/dreambooth"`](https://huggingface.co/sayakpaul/dreambooth).
 
 ## Training with Flax/JAX
 
